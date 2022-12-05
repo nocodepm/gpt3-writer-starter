@@ -8,7 +8,7 @@ const openai = new OpenAIApi(configuration);
 
 const secondPromptPrefix =
 `
-Check and correct the English grammar of this text for me. The full text must be less than 500 tokens.
+Check and correct the English grammar of this text for me. The full text must be less than 250 tokens.
 Text:
 `;
 const generateAction = async (req, res) => {
@@ -19,7 +19,7 @@ const generateAction = async (req, res) => {
     model: 'text-davinci-003',
     prompt: `${secondPromptPrefix}${req.body.userSecondInput}\n`,
     temperature: 0.8,
-    max_tokens: 500,
+    max_tokens: 250,
   });
   
   const secondPromptOutput = secondCompletion.data.choices.pop();
