@@ -5,15 +5,10 @@ import buildspaceLogo from '../assets/buildspace-logo.png';
 
 const Home = () => {
   const [userInput, setUserInput] = useState('');
-  const [userSecondInput, setSecondUserInput] = useState('');
   const [apiOutput, setApiOutput] = useState('')
 
   const onUserChangedText = (event) => {
     setUserInput(event.target.value);
-  };
-
-  const onSecondUserChangedText = (event) => {
-    setSecondUserInput(event.target.value);
   };
 
   const [isGenerating, setIsGenerating] = useState(false)
@@ -35,7 +30,13 @@ const Home = () => {
   setIsGenerating(false);
 }
 
+  const [userSecondInput, setSecondUserInput] = useState('');
   const [apiSecondOutput, setSecondApiOutput] = useState('')
+
+  const onSecondUserChangedText = (event) => {
+    setSecondUserInput(event.target.value);
+  };
+
   const [isGrammarChecking, setIsGrammarChecking] = useState(false)
   const callGrammarEndpoint = async () => {
     setIsGrammarChecking(true);
@@ -55,6 +56,32 @@ const Home = () => {
   setIsGrammarChecking(false);
 }
   
+  const [userThirdInput, setThirdUserInput] = useState('');
+  const [apiThirdOutput, setThirdApiOutput] = useState('')
+
+  const onThirdUserChangedText = (event) => {
+    setThirdUserInput(event.target.value);
+  };
+
+  const [isParaphrasing, setIsParaphrasing] = useState(false)
+  const callParaphraserEndpoint = async () => {
+    setIsParaphrasing(true);
+
+  const response = await fetch('/api/paraphraser', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ userThirdInput }),
+  });
+
+  const data = await response.json();
+  const { output } = data;
+
+  setThirdApiOutput(`${output.text}`);
+  setIsParaphrasing(false);
+  }
+
   return (
     <div className="root">
       <Head>
@@ -66,7 +93,7 @@ const Home = () => {
             <h1>ID-EN text translation exercise</h1>
           </div>
           <div className="header-subtitle">
-            <h2>Input a title or topic you have in mind either in Bahasa Indonesia or English, and then the bot will generate a text you can translate into English. After you're done translating, you can ask the bot to check and correct your grammars, even paraphrase the text for you (Pro feature coming soon).</h2>
+            <h2>Put in a title or topic in either English or Indonesian and the bot will give you some text to translate. Once you're done, you can ask the bot to check and fix your grammar and even reword the text.</h2>
           </div>
         </div>
       </div>
@@ -125,6 +152,36 @@ const Home = () => {
             </div>
             <div className="output-content">
               <p>{apiSecondOutput}</p>
+            </div>
+          </div>
+          )}
+        </div>
+        <div className="prompt-container">
+          <textarea
+          placeholder="Paraphrase your text here ..."
+          className="prompt-box"
+          value={userThirdInput}
+          onChange={onThirdUserChangedText}
+          />
+      <div className="prompt-buttons">
+          <a
+            className={isParaphrasing ? 'generate-button loading' : 'generate-button'}
+            onClick={callParaphraserEndpoint}
+            >
+            <div className="generate">
+            {isParaphrasing ? <span className="loader"></span> : <p>Reword</p>}
+              </div>
+              </a>
+            </div>
+            {apiThirdOutput && (
+          <div className="output">
+            <div className="output-header-container">
+              <div className="output-header">
+                <h3>Your paraprhased text</h3>
+              </div>
+            </div>
+            <div className="output-content">
+              <p>{apiThirdOutput}</p>
             </div>
           </div>
           )}
