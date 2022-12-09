@@ -214,12 +214,12 @@ textarea {
     flex: 0 0 auto;
     flex-flow: column nowrap;
     gap: 10px;
-    height: min-content;
+    height: max-content;
     overflow: hidden;
     padding: 16px 24px;
     position: relative;
     text-decoration: none;
-    width: min-content;
+    width: max-content;
     will-change: transform;
     cursor: pointer;
 }

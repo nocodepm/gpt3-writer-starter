@@ -2,6 +2,9 @@ import { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import buildspaceLogo from '../assets/buildspace-logo.png';
+import { useSpeechSynthesis } from 'react-speech-kit';
+import { useSpeechRecognition } from 'react-speech-kit';
+
 
 const Home = () => {
   const [userInput, setUserInput] = useState('');
@@ -82,6 +85,21 @@ const Home = () => {
   setIsParaphrasing(false);
   }
 
+  const [value, setValue] = useState('');
+  const onEnd = () => {
+    // You could do something here after speaking has finished
+  };
+  const { speak, cancel, speaking, supported, voices } = useSpeechSynthesis({
+    onEnd,
+  });
+
+  const [secondValue, setSecondValue] = useState('');
+  const { listen, listening, stop } = useSpeechRecognition({
+    onResult: (result) => {
+      setSecondValue(result);
+    },
+  });
+
   return (
     <div className="root">
       <Head>
@@ -109,7 +127,7 @@ const Home = () => {
               onClick={callGenerateEndpoint}
              >
             <div className="generate">
-            {isGenerating ? <span className="loader"></span> : <p>Generate</p>}
+            {isGenerating ? <span className="loader"></span> : <p>Generate text</p>}
               </div>
               </a>
             </div>
@@ -139,7 +157,7 @@ const Home = () => {
             onClick={callGrammarEndpoint}
             >
             <div className="generate">
-            {isGrammarChecking ? <span className="loader"></span> : <p>Grammar</p>}
+            {isGrammarChecking ? <span className="loader"></span> : <p>Check grammar</p>}
               </div>
               </a>
             </div>
@@ -169,7 +187,7 @@ const Home = () => {
             onClick={callParaphraserEndpoint}
             >
             <div className="generate">
-            {isParaphrasing ? <span className="loader"></span> : <p>Reword</p>}
+            {isParaphrasing ? <span className="loader"></span> : <p>Reword text</p>}
               </div>
               </a>
             </div>
@@ -186,6 +204,31 @@ const Home = () => {
           </div>
           )}
         </div>
+        <div className="prompt-container">
+          <div className="prompt-buttons">
+          {speaking ?
+            ( 
+              <a className="generate-button"
+                onClick={cancel}
+              >
+                <div className="generate">
+                  <p>Stop talking</p>
+                </div>
+              </a>
+            )
+            :
+            (
+              <a className="generate-button"
+                onClick={() => speak({ text: apiThirdOutput })}
+              >
+                <div className="generate">
+                  <p>Read out loud</p>
+                </div>
+              </a>
+            )}
+          </div>
+        </div>
+     
       <div className="badge-container grow">
         <a
           href="https://buildspace.so/builds/ai-writer"
