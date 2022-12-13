@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import buildspaceLogo from '../assets/buildspace-logo.png';
 import { useSpeechSynthesis } from 'react-speech-kit';
 import { useSpeechRecognition } from 'react-speech-kit';
+
 
 
 const Home = () => {
@@ -29,7 +30,9 @@ const Home = () => {
   const data = await response.json();
   const { output } = data;
 
-  setApiOutput(`${output.text}`);
+  const modifiedText = output.text.replace(/\n/g, '');
+
+  setApiOutput(modifiedText);
   setIsGenerating(false);
 }
 
@@ -55,7 +58,9 @@ const Home = () => {
   const data = await response.json();
   const { output } = data;
 
-  setSecondApiOutput(`${output.text}`);
+  const modifiedText = output.text.replace(/\n/g, '');
+
+  setSecondApiOutput(modifiedText);
   setIsGrammarChecking(false);
 }
   
@@ -75,13 +80,15 @@ const Home = () => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ userThirdInput }),
+    body: JSON.stringify({ apiSecondOutput }),
   });
 
   const data = await response.json();
   const { output } = data;
 
-  setThirdApiOutput(`${output.text}`);
+  const modifiedText = output.text.replace(/\n/g, '');
+
+  setThirdApiOutput(modifiedText);
   setIsParaphrasing(false);
   }
 
@@ -93,22 +100,36 @@ const Home = () => {
     onEnd,
   });
 
-  const [secondValue, setSecondValue] = useState('');
+  const [lang, setLang] = useState('en-US');
+  const [valueSecond, setValueSecond] = useState('');
+  const [blocked, setBlocked] = useState(false);
+  
   const { listen, listening, stop } = useSpeechRecognition({
     onResult: (result) => {
-      setSecondValue(result);
+          setValueSecond((result));
     },
   });
+
+  const toggle = listening
+    ? stop
+    : () => {
+        setBlocked(false);
+        listen({ lang });
+      };
+
+  const reset = () => {
+    setValueSecond('');
+    }
 
   return (
     <div className="root">
       <Head>
-        <title>GPT-3 Writer | buildspace</title>
+        <title>Daily Sprint English</title>
       </Head>
       <div className="container">
         <div className="header">
           <div className="header-title">
-            <h1>ID-EN text translation exercise</h1>
+            <h1>Daily Sprint English</h1>
           </div>
           <div className="header-subtitle">
             <h2>Put in a title or topic in either English or Indonesian and the bot will give you some text to translate. Once you're done, you can ask the bot to check and fix your grammar and even reword the text.</h2>
@@ -141,10 +162,7 @@ const Home = () => {
             <div className="output-content">
               <p>{apiOutput}</p>
             </div>
-          </div>
-          )}
-      </div>
-      <div className="prompt-container">
+            <div className="prompt-container">
           <textarea
           placeholder="Strat your translation here..."
           className="prompt-box"
@@ -168,19 +186,13 @@ const Home = () => {
                 <h3>Your grammar check</h3>
               </div>
             </div>
-            <div className="output-content">
-              <p>{apiSecondOutput}</p>
-            </div>
-          </div>
-          )}
-        </div>
-        <div className="prompt-container">
+            <div className="prompt-container">
           <textarea
-          placeholder="Paraphrase your text here ..."
+          placeholder="Strat your translation here..."
           className="prompt-box"
-          value={userThirdInput}
-          onChange={onThirdUserChangedText}
-          />
+          value={apiSecondOutput}
+          disabled
+          /> 
       <div className="prompt-buttons">
           <a
             className={isParaphrasing ? 'generate-button loading' : 'generate-button'}
@@ -201,34 +213,79 @@ const Home = () => {
             <div className="output-content">
               <p>{apiThirdOutput}</p>
             </div>
+            <div className="prompt-container">
+              <div className="prompt-buttons">
+              {speaking ?
+                ( 
+                  <a className="generate-button"
+                    onClick={cancel}
+                  >
+                    <div className="generate">
+                      <p>Stop talking</p>
+                    </div>
+                  </a>
+                )
+                :
+                (
+                  <a className="generate-button"
+                    onClick={() => speak({ text: apiThirdOutput })}
+                  >
+                    <div className="generate">
+                      <p>Read out loud</p>
+                    </div>
+                  </a>
+                )}
+              </div>
+            </div>
+            <div className="prompt-container">
+              <div className="output-header">
+                <h3>Speaking excercise</h3>
+              </div>
+              <div className="output-content">
+              <p>Read the paraphrased text from above, the Speech Recognition feature will try to transcipt your speaking. Here you can try to assess wethere you have pronounces the text correctly. Note: Please read the text out loud sentence by sentence.</p>
+            </div>
+            <textarea
+              placeholder="Waiting to recognize your speech ..."
+              className="prompt-box-short"
+              value={valueSecond}
+              disabled
+            />
+          <div className="prompt-buttons">
+            <a
+              className="generate-button"
+              disabled={blocked}
+              onClick={toggle}
+              >
+              {listening ?
+                <div className="generate">
+                <p>Stop talking</p>
+                </div>
+              :
+                <div className="generate">
+                <p>Listen to me</p>
+                </div>}
+            </a>
+            <a className="generate-button"
+                    onClick={reset}
+                  >
+                    <div className="generate">
+                      <p>Try again</p>
+                    </div>
+                  </a>
+                </div>
+            </div>
           </div>
           )}
         </div>
-        <div className="prompt-container">
-          <div className="prompt-buttons">
-          {speaking ?
-            ( 
-              <a className="generate-button"
-                onClick={cancel}
-              >
-                <div className="generate">
-                  <p>Stop talking</p>
-                </div>
-              </a>
-            )
-            :
-            (
-              <a className="generate-button"
-                onClick={() => speak({ text: apiThirdOutput })}
-              >
-                <div className="generate">
-                  <p>Read out loud</p>
-                </div>
-              </a>
-            )}
           </div>
+          )}
         </div>
-     
+          </div>
+          )}
+      </div>
+      
+          
+
       <div className="badge-container grow">
         <a
           href="https://buildspace.so/builds/ai-writer"

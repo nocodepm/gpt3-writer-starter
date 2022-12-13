@@ -13,11 +13,11 @@ Text:
 `;
 const generateAction = async (req, res) => {
 
-  console.log(`API: ${thirdPromptPrefix}${req.body.userThirdInput}`)
+  console.log(`API: ${thirdPromptPrefix}${req.body.apiSecondOutput}`)
 
   const thirdCompletion = await openai.createCompletion({
     model: 'text-davinci-003',
-    prompt: `${thirdPromptPrefix}${req.body.userThirdInput}\n`,
+    prompt: `${thirdPromptPrefix}${req.body.apiSecondOutput}\n`,
     temperature: 0.8,
     max_tokens: 250,
   });
