@@ -126,6 +126,15 @@ const Home = () => {
       <Head>
         <title>Daily Sprint English</title>
       </Head>
+                      <!-- Google tag (gtag.js) -->
+                <script async src="https://www.googletagmanager.com/gtag/js?id=G-X9SERWPJGG"></script>
+                <script>
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+
+                  gtag('config', 'G-X9SERWPJGG');
+                </script>
       <div className="container">
         <div className="header">
           <div className="header-title">
@@ -242,7 +251,7 @@ const Home = () => {
                 <h3>Speaking excercise</h3>
               </div>
               <div className="output-content">
-              <p>Read the paraphrased text from above, the Speech Recognition feature will try to transcipt your speaking. Here you can try to assess wethere you have pronounces the text correctly. Note: Please read the text out loud sentence by sentence.</p>
+              <p>Read through the paraphrased text above. The Speech Recognition feature will attempt to transcribe what you say. Here, you can check to see if you've pronounced the words correctly. Please read each sentence aloud.</p>
             </div>
             <textarea
               placeholder="Waiting to recognize your speech ..."
