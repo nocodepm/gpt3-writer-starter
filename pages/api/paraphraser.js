@@ -8,16 +8,16 @@ const openai = new OpenAIApi(configuration);
 
 const thirdPromptPrefix =
 `
-Paraphrase the text below into natural English language spoken by English native speakers. The full text must be less than 250 tokens.
+Paraphrase the text below into a natural simplified English language spoken by English native speakers. The full text must be less than 250 tokens.
 Text:
 `;
 const generateAction = async (req, res) => {
 
-  console.log(`API: ${thirdPromptPrefix}${req.body.apiSecondOutput}`)
+  console.log(`API: ${thirdPromptPrefix}${req.body.userThirdInput}`)
 
   const thirdCompletion = await openai.createCompletion({
     model: 'text-davinci-003',
-    prompt: `${thirdPromptPrefix}${req.body.apiSecondOutput}\n`,
+    prompt: `${thirdPromptPrefix}${req.body.userThirdInput}\n`,
     temperature: 0.8,
     max_tokens: 250,
   });
