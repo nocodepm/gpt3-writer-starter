@@ -10,10 +10,15 @@ import Script from 'next/script';
 
 const Home = () => {
   const [userInput, setUserInput] = useState('');
+  const [userFirstInput, setFirstUserInput] = useState('');
   const [apiOutput, setApiOutput] = useState('')
 
   const onUserChangedText = (event) => {
     setUserInput(event.target.value);
+  };
+
+  const onFirstUserChangedText = (event) => {
+    setFirstUserInput(event.target.value);
   };
 
   const [isGenerating, setIsGenerating] = useState(false)
@@ -25,7 +30,10 @@ const Home = () => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ userInput }),
+    body: JSON.stringify({
+      userInput,
+      userFirstInput,
+    }),
   });
 
   const data = await response.json();
@@ -205,11 +213,19 @@ const Home = () => {
                   <div className="col-lg-6">
                     <div className="appie-project-content-x">
                       <h3 className="title">Let's get started!</h3>
-                      <h5>1. Input any topic or title in your native language.</h5>
+                      <h5>1. Input your native language & any topic in your language.</h5>
                         <div className="input-box mt-30">
                           <input
                           type="text"
-                          placeholder="Sepak Bola, 산불, วันหยุด, Учиться, Nudeln kochen, 새해 전날, etc."
+                          placeholder="Language: Bahasa Indonesia, Mandarin, Korean, Germany, Russian, etc."
+                          value={userFirstInput}
+                          onChange={onFirstUserChangedText}
+                          />
+                        </div>
+                        <div className="input-box mt-30">
+                          <input
+                          type="text"
+                          placeholder="Topic: Sepak Bola, 산불, วันหยุด, Учиться, Nudeln kochen, 새해 전날, etc."
                           value={userInput}
                           onChange={onUserChangedText}
                           />
@@ -240,6 +256,7 @@ const Home = () => {
                       )
                     }
                   </div>
+
                   <div className="appie-project-content-x">
                   <h5 className="pt-50">2. Try to translate the generated text into English below.</h5>                   
                         <div className="input-box-height mt-30">

@@ -8,12 +8,19 @@ const openai = new OpenAIApi(configuration);
 
 const secondPromptPrefix =
 `
-Check, correct, simplify, and also point out the grammar error of the text below. Also tell me why they are grammatically incorrect and explain why do you suggest certain correction. The full text must be less than 500 tokens.
+Check, correct, simplify the English text below to be more precise in context.
  
+Also point out the grammar errors, and tell me why they are grammatically incorrect and explain why you suggest certain corrections.
+ 
+The full text must be less than 500 tokens.
+
 Include “Corrected text:” and “Grammar corrections:” as starting points.
  
+State all the changes in grammars, sentence structures, etc under "Grammar corrections:" as bullet points with explanation as to why it is being suggested, so it's easier to read.
+
 Text:
 `;
+
 const generateAction = async (req, res) => {
 
   console.log(`API: ${secondPromptPrefix}${req.body.userSecondInput}`)
@@ -22,7 +29,7 @@ const generateAction = async (req, res) => {
     model: 'text-davinci-003',
     prompt: `${secondPromptPrefix}${req.body.userSecondInput}\n`,
     temperature: 0.8,
-    max_tokens: 250,
+    max_tokens: 500,
   });
   
   const secondPromptOutput = secondCompletion.data.choices.pop();
