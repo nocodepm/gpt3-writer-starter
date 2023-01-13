@@ -336,6 +336,12 @@ textarea {
     color: #FCFCFC;
 }
 
+.output-content small {
+    text-align: left;
+    white-space: pre-line;
+    color: #FCFCFC;
+}
+
 @media (min-width: 810px) and (max-width: 1199px) {
     .containerx {
         max-width: 600px;

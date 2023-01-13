@@ -4265,6 +4265,9 @@ blockquote cite {
   .appie-project-content p {
     color: #fff;
     opacity: 0.8; }
+  .appie-project-content span {
+    color: #ffffff;
+    margin-top: 20px; }
   .appie-project-content .input-box {
     display: flex;
   }
@@ -4398,11 +4401,11 @@ blockquote cite {
                         color: #fff;
                         line-height: 50px; }
                         @media (max-width: 767px) {
-                          .appie-project-content-x .input-box-height button {
+                          .appie-project-content-x .no-box-height button {
                             margin-top: 20px;
                             margin-left: 0; } }
                         @media only screen and (min-width: 576px) and (max-width: 767px) {
-                          .appie-project-content-x .input-box-height button {
+                          .appie-project-content-x .no-box-height button {
                             margin-top: 0px;
                             margin-left: 10px; } }
 
@@ -5343,7 +5346,7 @@ blockquote cite {
     transform: translateY(-50%);
     height: 100%;
     width: 860px;
-    background-image: url(../images/download-thumb.png);
+    background-image: url(../images/hero-app-section.png);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

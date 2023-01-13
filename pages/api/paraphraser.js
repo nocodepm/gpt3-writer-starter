@@ -19,7 +19,7 @@ const generateAction = async (req, res) => {
   const thirdCompletion = await openai.createCompletion({
     model: 'text-davinci-003',
     prompt: `${thirdPromptPrefix}${req.body.userThirdInput}\n`,
-    temperature: 0.8,
+    temperature: 0.7,
     max_tokens: 500,
   });
   

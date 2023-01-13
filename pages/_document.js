@@ -12,6 +12,28 @@ export default function Document() {
         />
         <meta name="twitter:card" content="summary_large_image"></meta>
 
+                {/*====== Required meta tags ======*/}
+                <meta charSet="utf-8" />
+        <meta httpEquiv="x-ua-compatible" content="ie=edge" />
+        <meta name="description" content="" />
+        {/*====== Favicon Icon ======*/}
+        <link rel="shortcut icon" href="images/AvidX-favicon.png" type="image/png" />
+        {/*====== Bootstrap css ======*/}
+        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        {/*====== Fontawesome css ======*/}
+        <link rel="stylesheet" href="css/font-awesome.min.css" />
+        {/*====== Magnific Popup css ======*/}
+        <link rel="stylesheet" href="css/animate.min.css" />
+        {/*====== Magnific Popup css ======*/}
+        <link rel="stylesheet" href="css/magnific-popup.css" />
+        {/*====== Slick css ======*/}
+        <link rel="stylesheet" href="css/slick.css" />
+        {/*====== Default css ======*/}
+        <link rel="stylesheet" href="css/custom-animation.css" />
+        <link rel="stylesheet" href="css/default.css" />
+        {/*====== Style css ======*/}
+        <link rel="stylesheet" href="css/style.css" />
+
       </Head>
       <body>
         <Main />

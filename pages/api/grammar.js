@@ -8,7 +8,7 @@ const openai = new OpenAIApi(configuration);
 
 const secondPromptPrefix =
 `
-Check, correct, simplify the English text below to be more precise in context.
+Check and correct the text below to be more precise in context, based on standard English grammar.
  
 Also point out the grammar errors, and tell me why they are grammatically incorrect and explain why you suggest certain corrections.
  
@@ -28,7 +28,7 @@ const generateAction = async (req, res) => {
   const secondCompletion = await openai.createCompletion({
     model: 'text-davinci-003',
     prompt: `${secondPromptPrefix}${req.body.userSecondInput}\n`,
-    temperature: 0.8,
+    temperature: 0.7,
     max_tokens: 500,
   });
   

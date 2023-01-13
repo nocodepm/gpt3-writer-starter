@@ -112,19 +112,29 @@ const Home = () => {
   const [lang, setLang] = useState('en-US');
   const [valueSecond, setValueSecond] = useState('');
   const [blocked, setBlocked] = useState(false);
+  const [interimValues, setInterimValues] = useState([]);
   
   const { listen, listening, stop } = useSpeechRecognition({
+    continuous: true,
     onResult: (result) => {
-          setValueSecond((result));
+          console.log('Received final result:', result);
+          setValueSecond(valueSecond + ' ' + interimValues.join(' ') + ' ' + result);
+          setInterimValues([]);
     },
+    onInterimResult: (result) => {
+      console.log('Received interim result:', result);
+      setInterimValues((interimValues) => [...interimValues, result]);
+    },
+    interimResults: true,
   });
 
-  const toggle = listening
-    ? stop
-    : () => {
-        setBlocked(false);
-        listen({ lang });
-      };
+  const toggle = () => {
+    if (listening) {
+      stop();
+    } else {
+      listen();
+    }
+  };
 
   const reset = () => {
     setValueSecond('');
@@ -134,33 +144,13 @@ const Home = () => {
     <div className="root">
       <Head>
     
-        {/*====== Required meta tags ======*/}
-        <meta charSet="utf-8" />
-        <meta httpEquiv="x-ua-compatible" content="ie=edge" />
-        <meta name="description" content="" />
-        <meta
+      <meta
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
         {/*====== Title ======*/}
-        <title>AI-powered English learning apps</title>
-        {/*====== Favicon Icon ======*/}
-        <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
-        {/*====== Bootstrap css ======*/}
-        <link rel="stylesheet" href="css/bootstrap.min.css" />
-        {/*====== Fontawesome css ======*/}
-        <link rel="stylesheet" href="css/font-awesome.min.css" />
-        {/*====== Magnific Popup css ======*/}
-        <link rel="stylesheet" href="css/animate.min.css" />
-        {/*====== Magnific Popup css ======*/}
-        <link rel="stylesheet" href="css/magnific-popup.css" />
-        {/*====== Slick css ======*/}
-        <link rel="stylesheet" href="css/slick.css" />
-        {/*====== Default css ======*/}
-        <link rel="stylesheet" href="css/custom-animation.css" />
-        <link rel="stylesheet" href="css/default.css" />
-        {/*====== Style css ======*/}
-        <link rel="stylesheet" href="css/style.css" />
+        <title>AI-powered English-practicing apps</title>
+
 
       </Head>
 
@@ -353,26 +343,23 @@ const Home = () => {
                             <div className="output">
                             <h5 className="pt-50">5. Read through the paraphrased text above.</h5>
                                 <div className="output-content">
-                                <p className='pt-10'> The Speech Recognition feature will attempt to transcribe what you say. Here, you can check to see if you've pronounced the words correctly. Please read each sentence aloud.</p>
+                                <small className='ml-20 pt-10'> a. Click "Start Listening" button and read the first sentence out loud.
+                                <br></br> b. Click "Stop Listening" button to take a break between sentences.
+                                <br></br> c. Click "Start Listening" button again to continue with the second sentences.
+                                <br></br> d. Repeat the above steps to make sure the AI transcribes all the sentences.
+                                </small>
                               </div>
                               <div className="input-box-height mt-30">
                               <textarea
                                 placeholder="Waiting to recognize your speech ..."
                                 value={valueSecond}
+                                onChange={(event) => setValueSecond(event.target.value)}
                               />
-                            <button>
-                              <a
-                                disabled={blocked}
-                                onClick={toggle}
-                                >
-                                {listening ?
-                                  <div>
-                                  <p>Stop talking</p>
-                                  </div>
-                                :
-                                  <div>
-                                  <p>Listen to me</p>
-                                  </div>}
+                            <button >
+                              <a 
+                              onClick={toggle}
+                              >
+                              {listening ? 'Stop listening' : 'Start listening'}
                               </a>
                               <a
                                       onClick={reset}
